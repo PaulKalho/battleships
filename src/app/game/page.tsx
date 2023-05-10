@@ -47,7 +47,6 @@ export default function Home() {
     <div>
       <Board boardData={boardDataS} handleDrop={handleDropOnBoard} />
       <Inventory inventory={inventory} setCurrentShip={setCurrentShip} />
-      <button onClick={(e) => log(e)}> BTN </button>
     </div>
   );
 }

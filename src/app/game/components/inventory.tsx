@@ -1,24 +1,16 @@
 "use client";
 
-import { INVENTORY } from "@/utils/constants";
 import Ship from "./ship";
-import { useState } from "react";
-
-type InventoryParams = {
-  inventory: Array<Ship>;
-  setCurrentShip: Ship;
-};
-
-type Ship = {
-  name: string;
-  length: number;
-};
+import { type Ship as TypeShip, type InventoryParams } from "../types";
 
 export default function Inventory({
   inventory,
   setCurrentShip,
 }: InventoryParams) {
-  function onDragStart(e: React.DragEvent<HTMLDivElement>, ship: Ship): void {
+  function onDragStart(
+    e: React.DragEvent<HTMLDivElement>,
+    ship: TypeShip
+  ): void {
     console.log(e);
     setCurrentShip(ship);
   }

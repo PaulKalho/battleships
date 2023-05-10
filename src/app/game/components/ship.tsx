@@ -1,23 +1,21 @@
 "use client";
-import { constrainedMemory } from "process";
-import { ReactComponentElement, ReactElement, ReactHTML } from "react";
 import Field from "./field";
-
-type ShipData = {
-  name: string;
-  length: number;
-};
+import { type Ship } from "../types";
 
 function boatfields(length: number): Array<any> {
   var arr: Array<any> = [];
   for (var i = 0; i < length; i++) {
-    arr.push(<Field isShip={true} isBombed={false} />);
+    arr.push(
+      <div>
+        <Field isShip={true} isBombed={false} />
+      </div>
+    );
   }
 
   return arr;
 }
 
-export default function Ship({ name, length }: ShipData) {
+export default function Ship({ name, length }: Ship) {
   function log(name: string): void {
     console.log(name);
   }
