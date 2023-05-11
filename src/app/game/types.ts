@@ -16,12 +16,14 @@ type ColProps = {
 
 type InventoryParams = {
   inventory: Array<Ship>;
+  setInventory: Function;
   setCurrentShip: Ship;
 };
 
 type Ship = {
   name: string;
   length: number;
+  horizontal: Boolean;
 };
 
 export {

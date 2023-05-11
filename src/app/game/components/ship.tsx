@@ -1,6 +1,7 @@
 "use client";
 import Field from "./field";
 import { type Ship } from "../types";
+import { transform } from "typescript";
 
 function boatfields(length: number): Array<any> {
   var arr: Array<any> = [];
@@ -15,20 +16,19 @@ function boatfields(length: number): Array<any> {
   return arr;
 }
 
-export default function Ship({ name, length }: Ship) {
-  function log(name: string): void {
-    console.log(name);
-  }
-
+export default function Ship({ name, length, horizontal }: Ship) {
   return (
-    <main>
-      <div style={{ marginBottom: "50px" }} onClick={() => log(name)}>
-        {boatfields(length).map((item) => (
-          <div draggable="false" style={{ display: "inline-block" }}>
-            {item}
-          </div>
-        ))}
-      </div>
-    </main>
+    <div style={{}}>
+      {boatfields(length).map((item) => (
+        <div
+          draggable="false"
+          style={
+            horizontal ? { display: "inline-block" } : { display: "block" }
+          }
+        >
+          {item}
+        </div>
+      ))}
+    </div>
   );
 }

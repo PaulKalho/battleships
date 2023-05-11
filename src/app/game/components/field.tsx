@@ -1,6 +1,6 @@
 import { type FieldProps } from "../types";
 
-export default function Field({ isShip, isBombed }: FieldProps) {
+export default function Field({ isShip, isBombed, horizontal }: FieldProps) {
   return (
     <span
       style={{
