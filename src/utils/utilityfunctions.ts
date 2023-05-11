@@ -13,81 +13,58 @@ export function collisionHandler(
   //3. Ships not directly next to each other
 
   var allRulesFulfilled = true;
-  const insertedShipLength = insertedShip.length;
 
-  //First: I want an array containing all fields a ship is on, and check if its in boundarys
-  var boardFieldsCurrentShip = [];
+  //1. Check if start or end of ship is out of boundary
+  if (insertedShip.horizontal) {
+    var shipSnE = [x, x + insertedShip.length - 1];
+    if (!(isFieldValid(y, shipSnE[0]) && isFieldValid(y, shipSnE[1])))
+      return false;
+  } else {
+    var shipSnE = [y, y + insertedShip.length - 1];
+    if (!(isFieldValid(shipSnE[0], x) && isFieldValid(shipSnE[1], x)))
+      return false;
+  }
+
+  var shipNurroundingFields = [];
+  // This array contains all *valid* surronding fields of a ship (Rules 2, 3)
+  // X = Field A = Inside Array
+  // X X X X X X X
+  // X A A A A A X
+  // X A A A A A X
+  // X A A A A A X
+  // X X X X X X X
 
   if (insertedShip.horizontal) {
-    for (let i = 0; i < insertedShipLength; i++) {
-      if (x + i > BOARD_WIDTH - 1) {
-        //1. Ship has to be in boundarys (horizontally)
-        allRulesFulfilled = false;
-        break;
+    //Check if last or first index is out of boundary
+    //Ship goes from x to x+ship.length - 1
+
+    for (let j = -1; j < 2; j++) {
+      // row from -1 to 1 (-1: one row above ship) (0: ship row) (1: one row below ship)
+      for (let i = -1; i < insertedShip.length + 1; i++) {
+        // col from -1 to ship.length + 1 -> Also get field before and after
+        if (isFieldValid(y + j, x + i))
+          shipNurroundingFields.push(board[y + j][x + i]);
       }
-      boardFieldsCurrentShip.push(board[y][x + i]);
     }
   } else {
-    for (let i = 0; i < insertedShipLength; i++) {
-      if (y + i > BOARD_HEIGHT - 1) {
-        //1. Ship has to be in boundarys (vertically)
-        allRulesFulfilled = false;
-        break;
+    for (let j = -1; j < 2; j++) {
+      //This time: col from -1: one left, 0: ship col, 1: one right
+      for (let i = -1; i < insertedShip.length + 1; i++) {
+        if (isFieldValid(y + i, x + j))
+          shipNurroundingFields.push(board[y + i][x + j]);
       }
-
-      boardFieldsCurrentShip.push(board[y + i][x]);
     }
   }
 
-  //Check if one of the fields i want to put a ship on, has already a ship on it
-  for (let i = 0; i < boardFieldsCurrentShip.length; i++) {
-    if (boardFieldsCurrentShip[i].isShip) {
-      allRulesFulfilled = false;
-      break;
-    }
-    console.log(boardFieldsCurrentShip);
+  for (let i = 0; i < shipNurroundingFields.length; i++) {
+    if (shipNurroundingFields[i].isShip) allRulesFulfilled = false;
   }
-
-  //Check if neighbors are a ship
-  var boardFieldsShipNeighbors = [];
-  var test = [];
-  if (insertedShip.horizontal) {
-    //push the coordinate 1 before the ship:
-    if (!(x - 1 < 0)) boardFieldsShipNeighbors.push(board[y][x - 1]);
-    for (let i = -1; i <= insertedShipLength; i++) {
-      //For-loop starting at - 1 because we want sth like a border around the ship
-      // X X X X X
-      // X S S S X
-      // X X X X X
-      //push all coordinates 1 over the ship, if not out of boundary
-      if (
-        !(y + 1 > BOARD_HEIGHT - 1) &&
-        !(x + i < 0) &&
-        !(x + 1 > BOARD_WIDTH - 1)
-      )
-        boardFieldsShipNeighbors.push(board[y + 1][x + i]);
-
-      //push all coordinates 1 below the ship, if not out of boundary
-      if (!(y - 1 < 0) && !(x + i < 0) && !(x + 1 > BOARD_WIDTH - 1))
-        boardFieldsShipNeighbors.push(board[y - 1][x + i]);
-    }
-    //push the last coordinate:
-    if (!(x + insertedShipLength > BOARD_WIDTH - 1))
-      boardFieldsShipNeighbors.push(board[y][x + insertedShipLength]);
-  } else {
-    for (let i = 0; i < insertedShipLength; i++) {}
-  }
-
-  //Traverse through neighbors and check if ship
-  for (let i = 0; i < boardFieldsShipNeighbors.length; i++) {
-    if (boardFieldsShipNeighbors[i].isShip) {
-      allRulesFulfilled = false;
-      break;
-    }
-  }
-
-  //Idea is to add all fields to an array, containing its neighbors and the ship itself, check if nothin isShip === treu
-  //Write a function which check if coordinates are in boundary
 
   return allRulesFulfilled;
+}
+
+function isFieldValid(y: number, x: number): Boolean {
+  if (x > BOARD_WIDTH - 1 || x < 0) return false;
+  if (y > BOARD_HEIGHT - 1 || y < 0) return false;
+  return true;
 }

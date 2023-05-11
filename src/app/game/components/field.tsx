@@ -13,7 +13,7 @@ export default function Field({ isShip, isBombed, horizontal }: FieldProps) {
         height: "25px",
       }}
     >
-      {isShip ? <span>S</span> : isBombed ? "X" : 0}
+      {isShip ? <span>A</span> : isBombed ? "X" : 0}
     </span>
   );
 }
