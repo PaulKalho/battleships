@@ -8,6 +8,7 @@ import { collisionHandler } from "@/utils/utilityfunctions";
 export default function Home() {
   const [boardDataS, setBoardDataS] = useState([...FIELD]);
   const [inventory, setInventory] = useState([...INVENTORY]);
+  const [shipPositions, setShipPositions] = useState([]);
   const [currentShip, setCurrentShip] = useState({
     name: "default",
     length: 0,
@@ -25,24 +26,33 @@ export default function Home() {
     if (collisionHandler(boardDataS, currentShip, colNum, rowNum)) {
       var workBoard = [...boardDataS];
       const shipLength = currentShip.length;
+      var shipPositionsWork = []; //Contains the position of the ship
 
       if (currentShip.horizontal) {
         //Edit the workBoard(we want to draw the ship horizontally)
         for (let i = 0; i < shipLength; i++) {
+          shipPositionsWork.push({ y: rowNum, x: colNum + i });
           workBoard[rowNum][colNum + i] = {
             isShip: true,
             isBombed: false,
+            shipIndex: shipPositions.length,
           };
         }
       } else {
         //Draw it vertically
         for (let i = 0; i < shipLength; i++) {
+          shipPositionsWork.push({ x: rowNum + i, y: colNum });
           workBoard[rowNum + i][colNum] = {
             isShip: true,
             isBombed: false,
+            shipIndex: shipPositions.length,
           };
         }
+        console.log(workBoard);
       }
+      var shipPositionsNew = [...shipPositions];
+      shipPositionsNew.push(shipPositionsWork);
+      setShipPositions(shipPositionsNew);
 
       setBoardDataS(workBoard);
       //And finally delete the used Ship from the inventory

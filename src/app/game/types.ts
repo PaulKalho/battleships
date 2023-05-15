@@ -1,6 +1,7 @@
 type FieldProps = {
   isShip: Boolean;
   isBombed: Boolean;
+  shipIndex: number;
 };
 
 type BoardProps = {

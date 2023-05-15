@@ -1,19 +1,19 @@
-import { type FieldProps } from "../types";
+import React from "react";
 
-export default function Field({ isShip, isBombed, horizontal }: FieldProps) {
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        border: "1px solid black",
-        padding: "15px",
-        color: isShip ? "red" : "white",
-        margin: "1px",
-        width: "25px",
-        height: "25px",
-      }}
-    >
-      {isShip ? <span>A</span> : isBombed ? "X" : 0}
-    </span>
-  );
-}
+type FieldProps = {
+  isShip: boolean;
+  isBombed: boolean;
+};
+
+const Field = ({ isShip, isBombed }: FieldProps): React.ReactElement => {
+  const fieldStyle = {
+    background: isShip ? "darkgrey" : isBombed ? "red" : "lightblue",
+    border: "1px solid black",
+    width: "50px",
+    height: "50px",
+  };
+
+  return <div className="field" style={fieldStyle}></div>;
+};
+
+export default Field;

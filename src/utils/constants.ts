@@ -1,422 +1,528 @@
+//Idee: FIELD bekommt Attribut: shipIndex
+//2 Array: Inventory(Ships) speichert auch x und y werte des schiffes
+//Wird ein schiff platziert wird das Field mit dem shipIndex belegt
+//Wird ein schiff umplaziert: Schaue auf board welches schiff auf dem Field ist(shipIndex), finde im inventory, ändere ship index auf board.
+//Probleme: Wie gehe ich mit dragndrop um, wie gehe ich mit inventar um?
+
 export const FIELD = [
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
-    },
-  ],
-  [
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
+      shipIndex: undefined,
     },
   ],
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
-    },
-  ],
-  [
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
+      shipIndex: undefined,
     },
   ],
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
-    },
-  ],
-  [
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
+      shipIndex: undefined,
     },
   ],
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
-    },
-  ],
-  [
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
-    },
-    {
-      isShip: false,
-      isBombed: false,
+      shipIndex: undefined,
     },
   ],
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
   ],
   [
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
     },
     {
       isShip: false,
       isBombed: false,
+      shipIndex: undefined,
+    },
+  ],
+  [
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+  ],
+  [
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+  ],
+  [
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+  ],
+  [
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
+    },
+    {
+      isShip: false,
+      isBombed: false,
+      shipIndex: undefined,
     },
   ],
 ];
