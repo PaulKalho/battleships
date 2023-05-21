@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
 
-let socket;
-
 export default function Home() {
   const playerField = FIELD.map((i) => [...i]);
   const opponentField = FIELD.map((i) => [...i]);
