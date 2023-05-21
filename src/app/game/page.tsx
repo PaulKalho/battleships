@@ -5,10 +5,11 @@ import Inventory from "./components/inventory";
 import { FIELD, INVENTORY } from "@/utils/constants";
 import { useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
+import { FieldProps, Coordinates } from "./types";
 export default function Home() {
   const [boardDataS, setBoardDataS] = useState([...FIELD]);
   const [inventory, setInventory] = useState([...INVENTORY]);
-  const [shipPositions, setShipPositions] = useState([]);
+  const [shipPositions, setShipPositions] = useState([[{ x: 0, y: 0 }]]);
   const [currentShip, setCurrentShip] = useState({
     name: "default",
     length: 0,
@@ -24,9 +25,9 @@ export default function Home() {
 
     //TODO: Implement a rules handler
     if (collisionHandler(boardDataS, currentShip, colNum, rowNum)) {
-      var workBoard = [...boardDataS];
+      var workBoard: Array<Array<FieldProps>> = [...boardDataS];
       const shipLength = currentShip.length;
-      var shipPositionsWork = []; //Contains the position of the ship
+      var shipPositionsWork: Array<Coordinates> = []; //Contains the position of the ship
 
       if (currentShip.horizontal) {
         //Edit the workBoard(we want to draw the ship horizontally)
@@ -38,6 +39,7 @@ export default function Home() {
             shipIndex: shipPositions.length,
           };
         }
+        console.log(workBoard);
       } else {
         //Draw it vertically
         for (let i = 0; i < shipLength; i++) {
@@ -50,7 +52,7 @@ export default function Home() {
         }
         console.log(workBoard);
       }
-      var shipPositionsNew = [...shipPositions];
+      var shipPositionsNew: Array<Array<Coordinates>> = [...shipPositions];
       shipPositionsNew.push(shipPositionsWork);
       setShipPositions(shipPositionsNew);
 

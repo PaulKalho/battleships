@@ -1,7 +1,12 @@
 type FieldProps = {
   isShip: Boolean;
   isBombed: Boolean;
-  shipIndex: number;
+  shipIndex: any;
+};
+
+type Coordinates = {
+  x: number;
+  y: number;
 };
 
 type BoardProps = {
@@ -18,7 +23,7 @@ type ColProps = {
 type InventoryParams = {
   inventory: Array<Ship>;
   setInventory: Function;
-  setCurrentShip: Ship;
+  setCurrentShip: Function;
 };
 
 type Ship = {
@@ -33,4 +38,5 @@ export {
   type ColProps,
   type Ship,
   type InventoryParams,
+  type Coordinates,
 };

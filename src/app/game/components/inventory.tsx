@@ -16,7 +16,7 @@ export default function Inventory({
     setCurrentShip(ship);
   }
 
-  function handleClick(e: MouseEvent, ship: TypeShip): void {
+  function handleClick(e: React.MouseEvent, ship: TypeShip): void {
     var work = [...inventory];
     var idx = work.findIndex((shipA) => shipA.name === ship.name);
     work[idx].horizontal = !work[idx].horizontal;
