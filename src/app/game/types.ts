@@ -12,6 +12,7 @@ type Coordinates = {
 type BoardProps = {
   boardData: Array<Array<FieldProps>>;
   handleDrop: Function;
+  handleClick: Function;
 };
 
 type ColProps = {

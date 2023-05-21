@@ -1,7 +1,11 @@
 import Field from "./field";
 import { type BoardProps } from "../types";
 
-export default function Board({ boardData, handleDrop }: BoardProps) {
+export default function Board({
+  boardData,
+  handleDrop,
+  handleClick,
+}: BoardProps) {
   return (
     <div className="game-board">
       {boardData.map((row, y) => (
@@ -12,6 +16,7 @@ export default function Board({ boardData, handleDrop }: BoardProps) {
               className={`field ${field.isShip ? "ship" : ""}`}
               onDrop={(e) => handleDrop(e, x, y)}
               onDragOver={(e) => e.preventDefault()}
+              onClick={(e) => handleClick(e, x, y)}
             >
               {field.isShip ? (
                 <div className={`ship ${field.shipIndex}`}>

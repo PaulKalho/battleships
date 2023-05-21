@@ -3,11 +3,18 @@
 import Board from "./components/board";
 import Inventory from "./components/inventory";
 import { FIELD, INVENTORY } from "@/utils/constants";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
+
+let socket;
+
 export default function Home() {
-  const [boardDataS, setBoardDataS] = useState([...FIELD]);
+  const playerField = FIELD.map((i) => [...i]);
+  const opponentField = FIELD.map((i) => [...i]);
+  const [boardDataS, setBoardDataS] = useState(playerField);
+  const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
+
   const [inventory, setInventory] = useState([...INVENTORY]);
   const [shipPositions, setShipPositions] = useState([[{ x: 0, y: 0 }]]);
   const [currentShip, setCurrentShip] = useState({
@@ -22,7 +29,7 @@ export default function Home() {
     rowNum: number
   ): void {
     //In this function we place a ship on the board
-
+    console.log(boardDataAttacker);
     //TODO: Implement a rules handler
     if (collisionHandler(boardDataS, currentShip, colNum, rowNum)) {
       var workBoard: Array<Array<FieldProps>> = [...boardDataS];
@@ -68,14 +75,56 @@ export default function Home() {
     }
   }
 
+  function handleOnClick(
+    e: React.MouseEvent,
+    colNum: number,
+    rowNum: number
+  ): void {
+    var workBoard: Array<Array<FieldProps>> = [...boardDataAttacker];
+
+    workBoard[rowNum][colNum] = {
+      isShip: false,
+      isBombed: true,
+      shipIndex: workBoard[rowNum][colNum].shipIndex,
+    };
+
+    setBoardDataAttacker(workBoard);
+  }
+
+  function handleDropAttacker(
+    e: React.DragEvent<HTMLSpanElement>,
+    colNum: number,
+    rowNum: number
+  ): void {}
   return (
     <div>
-      <Board boardData={boardDataS} handleDrop={handleDropOnBoard} />
-      <Inventory
-        inventory={inventory}
-        setInventory={setInventory}
-        setCurrentShip={setCurrentShip}
-      />
+      <div style={{ display: "flex", width: "100%" }}>
+        <Board
+          boardData={boardDataS}
+          handleDrop={handleDropOnBoard}
+          handleClick={(e) => {
+            e.preventDefault();
+          }}
+        />
+        <Inventory
+          inventory={inventory}
+          setInventory={setInventory}
+          setCurrentShip={setCurrentShip}
+        />
+      </div>
+      <div
+        style={{
+          width: "100%",
+        }}
+      >
+        {/* The opponent-Board: */}
+        Feind:
+        <Board
+          boardData={boardDataAttacker}
+          handleDrop={handleDropAttacker}
+          handleClick={handleOnClick}
+        />
+      </div>
     </div>
   );
 }

@@ -25,12 +25,12 @@ export default function Inventory({
   }
 
   return (
-    <main>
-      <h1>Inventar:</h1>
+    <div className="inventory">
+      Inventar:
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexWrap: "wrap",
           gridAutoRows: "auto",
         }}
       >
@@ -40,6 +40,7 @@ export default function Inventory({
             style={{
               width: "max-content",
               marginBottom: "25px",
+              padding: "10px",
             }}
             onDragStart={(e) => onDragStart(e, ship)}
             onClick={(e) => handleClick(e, ship)}
@@ -52,6 +53,6 @@ export default function Inventory({
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }
