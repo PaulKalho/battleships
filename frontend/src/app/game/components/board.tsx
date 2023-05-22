@@ -20,11 +20,19 @@ export default function Board({
             >
               {field.isShip ? (
                 <div className={`ship ${field.shipIndex}`}>
-                  <Field isBombed={field.isBombed} isShip={field.isShip} />
+                  <Field
+                    isBombed={field.isBombed}
+                    isShip={field.isShip}
+                    isHit={field.isHit}
+                  />
                 </div>
               ) : (
                 <div className="field">
-                  <Field isBombed={field.isBombed} isShip={field.isShip} />
+                  <Field
+                    isBombed={field.isBombed}
+                    isShip={field.isShip}
+                    isHit={field.isHit}
+                  />
                 </div>
               )}
             </div>

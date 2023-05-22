@@ -2,24 +2,64 @@
 
 import Board from "./components/board";
 import Inventory from "./components/inventory";
-import { FIELD, INVENTORY } from "@/utils/constants";
+import { FIELD, OPPONENT_FIELD, INVENTORY } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
+import { useGlobalContext } from "../context/store";
+import { useSearchParams, useRouter } from "next/navigation";
+import { textSpanIntersectsWithTextSpan } from "typescript";
 
+/**
+ *
+ * This component is the game-board
+ */
 export default function Home() {
+  const opponentField = OPPONENT_FIELD.map((i) => [...i]);
   const playerField = FIELD.map((i) => [...i]);
-  const opponentField = FIELD.map((i) => [...i]);
-  const [boardDataS, setBoardDataS] = useState(playerField);
-  const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
 
+  const { socket } = useGlobalContext();
+  const searchParams = useSearchParams();
+
+  const [boardDataS, setBoardDataS] = useState(playerField);
+  const [gameId, setGameId] = useState<string>();
+  const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
   const [inventory, setInventory] = useState([...INVENTORY]);
-  const [shipPositions, setShipPositions] = useState([[{ x: 0, y: 0 }]]);
+  const [shipPositions, setShipPositions] = useState<Array<any>>([]);
+  const [waiting, setWaiting] = useState(true);
   const [currentShip, setCurrentShip] = useState({
     name: "default",
     length: 0,
     horizontal: true,
   });
+
+  type wasBombedParams = {
+    rowNum: number;
+    colNum: number;
+  };
+
+  useEffect(() => {
+    //Generate Game ID:
+    var val = Math.floor(1000 + Math.random() * 9000);
+
+    if (searchParams.get("id") === null) setGameId(val.toString());
+    else setGameId(searchParams.get("id"));
+
+    //Check if Game starts:
+    socket.on("start-game", () => {
+      setWaiting(false);
+      // Its this clients turn
+    });
+
+    socket.on("was-bombed", ({ rowNum, colNum }: wasBombedParams) => {
+      var workBoard = [...boardDataS];
+
+      workBoard[rowNum][colNum].isBombed = true;
+
+      setBoardDataS(workBoard);
+      setWaiting(false);
+    });
+  }, [shipPositions]);
 
   function handleDropOnBoard(
     e: React.DragEvent<HTMLSpanElement>,
@@ -27,7 +67,7 @@ export default function Home() {
     rowNum: number
   ): void {
     //In this function we place a ship on the board
-    console.log(boardDataAttacker);
+
     //TODO: Implement a rules handler
     if (collisionHandler(boardDataS, currentShip, colNum, rowNum)) {
       var workBoard: Array<Array<FieldProps>> = [...boardDataS];
@@ -44,7 +84,6 @@ export default function Home() {
             shipIndex: shipPositions.length,
           };
         }
-        console.log(workBoard);
       } else {
         //Draw it vertically
         for (let i = 0; i < shipLength; i++) {
@@ -55,18 +94,16 @@ export default function Home() {
             shipIndex: shipPositions.length,
           };
         }
-        console.log(workBoard);
       }
       var shipPositionsNew: Array<Array<Coordinates>> = [...shipPositions];
       shipPositionsNew.push(shipPositionsWork);
+      console.log(shipPositionsNew);
       setShipPositions(shipPositionsNew);
-
       setBoardDataS(workBoard);
-      //And finally delete the used Ship from the inventory
 
+      //And finally delete the used Ship from the inventory
       var workInventory = [...inventory];
       workInventory = workInventory.filter((item) => item !== currentShip);
-      console.log(workInventory);
       setInventory(workInventory);
     } else {
       //Do nothin
@@ -78,16 +115,28 @@ export default function Home() {
     colNum: number,
     rowNum: number
   ): void {
-    var workBoard: Array<Array<FieldProps>> = [...boardDataAttacker];
+    if (waiting === false) {
+      var workBoard: Array<Array<FieldProps>> = [...boardDataAttacker];
 
-    workBoard[rowNum][colNum] = {
-      isShip: false,
-      isBombed: true,
-      shipIndex: workBoard[rowNum][colNum].shipIndex,
-    };
+      workBoard[rowNum][colNum] = {
+        isShip: false,
+        isBombed: true,
+        shipIndex: workBoard[rowNum][colNum].shipIndex,
+      };
 
-    setBoardDataAttacker(workBoard);
-    //Send Data to socket
+      setBoardDataAttacker(workBoard);
+      //Send Data to socket
+      socket.emit("bomb", {
+        x: colNum,
+        y: rowNum,
+      });
+
+      setWaiting(true);
+    }
+  }
+
+  function joinGame(): void {
+    socket.emit("join_game", { gameId: gameId });
   }
 
   function handleDropAttacker(
@@ -97,6 +146,8 @@ export default function Home() {
   ): void {}
   return (
     <div>
+      {waiting ? "Warten" : "Du bsit an der reihe"}
+      {gameId}
       <div style={{ display: "flex", width: "100%" }}>
         <Board
           boardData={boardDataS}
@@ -110,6 +161,11 @@ export default function Home() {
           setInventory={setInventory}
           setCurrentShip={setCurrentShip}
         />
+      </div>
+      <div>
+        <button className="ready" onClick={joinGame}>
+          Bereit
+        </button>
       </div>
       <div
         style={{

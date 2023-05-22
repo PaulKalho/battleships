@@ -1,6 +1,7 @@
 type FieldProps = {
-  isShip: Boolean;
-  isBombed: Boolean;
+  isShip: boolean;
+  isBombed: boolean;
+  isHit: boolean;
   shipIndex: any;
 };
 

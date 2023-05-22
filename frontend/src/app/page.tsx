@@ -1,8 +1,7 @@
 "use client";
 
-import { ChangeEventHandler, useEffect, useState } from "react";
-import network from "@/utils/sockets/Network";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useGlobalContext } from "./context/store";
 
 export default function Home() {
   const router = useRouter();
@@ -11,6 +10,7 @@ export default function Home() {
   const test = searchParams.get("id");
   const [gameId, setGameId] = useState<any>();
   const [name, setName] = useState<string>();
+  const { socket } = useGlobalContext();
 
   useEffect(() => {
     var val = Math.floor(1000 + Math.random() * 9000);
@@ -22,7 +22,8 @@ export default function Home() {
   function initGame() {
     //Emit something to the socket-server
     //Joins the player to a game
-    network.init("http://localhost:3001", name, gameId);
+    // network.init("http://localhost:3001", name, gameId);
+    socket.emit("join_game", { name: name, gameId: gameId });
     router.push("/game");
   }
 
