@@ -1,5 +1,3 @@
-declare var require: any;
-
 const express = require("express");
 const http = require("http");
 const app = express();
@@ -13,13 +11,22 @@ const io = new Server(server, {
   },
 });
 
-type Field = {
-  x: number | null;
-  y: number | null;
+type Init = {
+  name: string;
+  gameId: number;
 };
 
 io.on("connection", (socket) => {
-  socket.on("bomb-field", ({ x, y }: Field) => {
-    socket.broadcast.emit("bomb-field", { x });
+  socket.on("initialize", ({ name, gameId }: Init) => {
+    socket.join(gameId.toString());
+
+    if (io.sockets.adapter.rooms.get(gameId.toString())?.size === 2) {
+      console.log("START");
+      socket.emit("start-game");
+    }
   });
+});
+
+server.listen(3001, () => {
+  console.log("Server listening");
 });

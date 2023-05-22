@@ -6,7 +6,6 @@ import { FIELD, INVENTORY } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
-import { io } from "socket.io-client";
 
 export default function Home() {
   const playerField = FIELD.map((i) => [...i]);
@@ -88,6 +87,7 @@ export default function Home() {
     };
 
     setBoardDataAttacker(workBoard);
+    //Send Data to socket
   }
 
   function handleDropAttacker(
