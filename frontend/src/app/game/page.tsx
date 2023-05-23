@@ -2,13 +2,17 @@
 
 import Board from "./components/board";
 import Inventory from "./components/inventory";
-import { FIELD, OPPONENT_FIELD, INVENTORY } from "@/utils/constants";
+import {
+  FIELD,
+  OPPONENT_FIELD,
+  INVENTORY,
+  GAME_CONDITIONS,
+} from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
 import { useGlobalContext } from "../context/store";
 import { useSearchParams, useRouter } from "next/navigation";
-import { textSpanIntersectsWithTextSpan } from "typescript";
 
 /**
  *
@@ -22,11 +26,11 @@ export default function Home() {
   const searchParams = useSearchParams();
 
   const [boardDataS, setBoardDataS] = useState(playerField);
+  const [gameStatus, setGameStatus] = useState(GAME_CONDITIONS.SELECT_FIELD);
   const [gameId, setGameId] = useState<string>();
   const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
   const [inventory, setInventory] = useState([...INVENTORY]);
   const [shipPositions, setShipPositions] = useState<Array<any>>([]);
-  const [waiting, setWaiting] = useState(true);
   const [currentShip, setCurrentShip] = useState({
     name: "default",
     length: 0,
@@ -47,8 +51,8 @@ export default function Home() {
 
     //Check if Game starts:
     socket.on("start-game", () => {
-      setWaiting(false);
       // Its this clients turn
+      setGameStatus(GAME_CONDITIONS.PLAY);
     });
 
     // was-bombed -> Opponent bombed a field
@@ -58,7 +62,7 @@ export default function Home() {
       workBoard[rowNum][colNum].isBombed = true;
 
       setBoardDataS([...workBoard]);
-      setWaiting(false);
+      setGameStatus(GAME_CONDITIONS.PLAY);
     });
 
     // was-a-hit -> Player hit a ship on opponent Field
@@ -132,7 +136,7 @@ export default function Home() {
     colNum: number,
     rowNum: number
   ): void {
-    if (waiting === false) {
+    if (gameStatus === GAME_CONDITIONS.PLAY) {
       var workBoard: Array<Array<FieldProps>> = [...boardDataAttacker];
 
       workBoard[rowNum][colNum] = {
@@ -149,7 +153,7 @@ export default function Home() {
         y: rowNum,
       });
 
-      setWaiting(true);
+      setGameStatus(GAME_CONDITIONS.WAIT_FOR_BOMB);
     }
   }
 
@@ -158,6 +162,7 @@ export default function Home() {
       gameId: gameId,
       boardData: boardDataS,
     });
+    setGameStatus(GAME_CONDITIONS.WAIT_FOR_PLAYER);
   }
 
   function handleDropAttacker(
@@ -167,7 +172,7 @@ export default function Home() {
   ): void {}
   return (
     <div>
-      {waiting ? "Warten" : "Du bsit an der reihe"}
+      <h1>{gameStatus.desc}</h1>
       {gameId}
       <div style={{ display: "flex", width: "100%" }}>
         <Board

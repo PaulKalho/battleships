@@ -1302,5 +1302,20 @@ export const INVENTORY = [
   },
 ];
 
+export const GAME_CONDITIONS = {
+  PLAY: {
+    desc: "Du bist an der Reihe!",
+  },
+  WAIT_FOR_BOMB: {
+    desc: "Dein Gegner ist an der Reihe!",
+  },
+  WAIT_FOR_PLAYER: {
+    desc: "Warte auf deinen Mitspieler",
+  },
+  SELECT_FIELD: {
+    desc: "Verteile deine Schiffe auf dem Spielfeld!",
+  },
+};
+
 export const BOARD_WIDTH = 10;
 export const BOARD_HEIGHT = 10;
