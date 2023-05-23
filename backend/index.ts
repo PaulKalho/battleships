@@ -14,6 +14,7 @@ const io = new Server(server, {
 type Init = {
   gameId: string;
   boardData: any;
+  shipPositions: any;
 };
 
 type Field = {
@@ -21,9 +22,17 @@ type Field = {
   y: number;
 };
 
+type OpponentPlayerInfo = {
+  board: any;
+  shipPostitions: any;
+};
+
 var gameIdGlobal: string;
 
-function getOpponentPlayerBoard(socket: any, participants: any): any {
+function getOpponentPlayerInfo(
+  socket: any,
+  participants: any
+): OpponentPlayerInfo {
   /**
    * Gets the PlayerBoard of the opponent
    * @param socket = the connected socket
@@ -32,6 +41,10 @@ function getOpponentPlayerBoard(socket: any, participants: any): any {
    * @return the opponent playerBoard
    */
   const socketOfEmitter = socket;
+  var opponentPlayerInfo: OpponentPlayerInfo = {
+    board: undefined,
+    shipPostitions: undefined,
+  };
   var opponentPlayerBoard: any = undefined;
 
   for (const participantId of participants) {
@@ -39,14 +52,17 @@ function getOpponentPlayerBoard(socket: any, participants: any): any {
     // console.log("Emitter: " + socketOfEmitter?.data.gameBoard);
     // console.log("Client: " + clientSocket?.data.gameBoard);
     if (socketOfEmitter !== clientSocket) {
-      opponentPlayerBoard = clientSocket?.data.gameBoard;
+      opponentPlayerInfo = {
+        board: clientSocket?.data.gameBoard,
+        shipPostitions: clientSocket?.data.shipPositions,
+      };
     }
   }
 
-  return opponentPlayerBoard;
+  return opponentPlayerInfo;
 }
 
-function isHit(x: any, y: any, board: any): boolean {
+function isHit(x: number, y: number, board: any): boolean {
   /**
    * Function checks if a bomb is a hit
    * @param x = x-coord
@@ -55,11 +71,35 @@ function isHit(x: any, y: any, board: any): boolean {
    *
    * @return bool
    */
+
   if (board[y][x].isShip) {
+    board[y][x].isBombed = true;
     return true;
   } else {
     return false;
   }
+}
+
+function shipDestroyed(
+  x: number,
+  y: number,
+  board: any,
+  shipPositions: any
+): boolean {
+  /**
+   * Checks if the bomb, did destroy a ship (all fields of the ship bombed)
+   * We already checked if the bomb was a hit, so we dont have to do it here anymore
+   * @param x = x-coord
+   * @param y = y-coord
+   * @param board = the board to check
+   * @param shipPositions = the shipPositionsArray (all positions of each ship)
+   *
+   * @return bool
+   */
+
+  const allPos = shipPositions[board[y][x].shipIndex];
+
+  return allPos.every((pos: any) => board[pos.y][pos.x].isBombed === true);
 }
 
 /**  Send to the sender and none else
@@ -85,11 +125,12 @@ function isHit(x: any, y: any, board: any): boolean {
 // socket.broadcast.to(otherSocket.id).emit('hello', msg); */
 
 io.on("connection", (socket) => {
-  socket.on("join_game", ({ gameId, boardData }: Init) => {
+  socket.on("join_game", ({ gameId, boardData, shipPositions }: Init) => {
     /** Player joins game and sends the board */
     // Set the Data
     gameIdGlobal = gameId;
     socket.data.gameBoard = boardData;
+    socket.data.shipPositions = shipPositions;
 
     // Join Room
     socket.join(gameIdGlobal);
@@ -107,13 +148,29 @@ io.on("connection", (socket) => {
   socket.on("bomb", ({ x, y }: Field) => {
     /** A bomb was placed */
 
-    const opponentPlayerBoard = getOpponentPlayerBoard(
+    const opponentPlayerInfo = getOpponentPlayerInfo(
       socket,
       io.sockets.adapter.rooms.get(gameIdGlobal)
     );
 
-    if (isHit(x, y, opponentPlayerBoard)) {
+    if (isHit(x, y, opponentPlayerInfo.board)) {
       /** Bomb placed hit a ship */
+      if (
+        shipDestroyed(
+          x,
+          y,
+          opponentPlayerInfo.board,
+          opponentPlayerInfo.shipPostitions
+        )
+      ) {
+        //Ship was destroyed -> to the bomber
+        socket.emit("ship-destroyed", {
+          shipLength:
+            opponentPlayerInfo.shipPostitions[
+              opponentPlayerInfo.board[y][x].shipIndex
+            ].length,
+        });
+      }
       socket.emit("was-a-hit", { colNum: x, rowNum: y });
     }
 

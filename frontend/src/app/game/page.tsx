@@ -6,6 +6,7 @@ import {
   FIELD,
   OPPONENT_FIELD,
   INVENTORY,
+  OPPONENT_SHIPS,
   GAME_CONDITIONS,
 } from "@/utils/constants";
 import { useEffect, useState } from "react";
@@ -26,9 +27,11 @@ export default function Home() {
   const searchParams = useSearchParams();
 
   const [boardDataS, setBoardDataS] = useState(playerField);
+  const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
+
   const [gameStatus, setGameStatus] = useState(GAME_CONDITIONS.SELECT_FIELD);
   const [gameId, setGameId] = useState<string>();
-  const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
+
   const [inventory, setInventory] = useState([...INVENTORY]);
   const [shipPositions, setShipPositions] = useState<Array<any>>([]);
   const [currentShip, setCurrentShip] = useState({
@@ -36,10 +39,15 @@ export default function Home() {
     length: 0,
     horizontal: true,
   });
+  const [opponentShips, setOpponentShips] = useState([...OPPONENT_SHIPS]);
 
   type wasBombedParams = {
     rowNum: number;
     colNum: number;
+  };
+
+  type shipDestroyedParams = {
+    shipLength: number;
   };
 
   useEffect(() => {
@@ -77,6 +85,25 @@ export default function Home() {
       };
 
       setBoardDataAttacker([...workBoard]);
+    });
+
+    //ship-destroyed -> Player destroyed a ship
+    socket.on("ship-destroyed", ({ shipLength }: shipDestroyedParams) => {
+      let foundShip = false;
+      setOpponentShips(
+        opponentShips.filter((ship: any) => {
+          if (foundShip) {
+            return true;
+          }
+          foundShip = ship.length === shipLength;
+          return !foundShip;
+        })
+      );
+
+      if (opponentShips.length === 0) {
+        //GAME WON!!!!
+        console.log("DU GEWINNST");
+      }
     });
   }, [shipPositions]);
 
@@ -161,6 +188,7 @@ export default function Home() {
     socket.emit("join_game", {
       gameId: gameId,
       boardData: boardDataS,
+      shipPositions: shipPositions,
     });
     setGameStatus(GAME_CONDITIONS.WAIT_FOR_PLAYER);
   }
@@ -195,6 +223,7 @@ export default function Home() {
       </div>
       <div
         style={{
+          display: "flex",
           width: "100%",
         }}
       >
@@ -204,6 +233,12 @@ export default function Home() {
           boardData={boardDataAttacker}
           handleDrop={handleDropAttacker}
           handleClick={handleOnClick}
+        />
+        {/* A deactivated Inventory which show remaining ships of the opponent */}
+        <Inventory
+          inventory={opponentShips}
+          setInventory={setOpponentShips}
+          setCurrentShip={setCurrentShip}
         />
       </div>
     </div>
