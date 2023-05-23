@@ -1,6 +1,6 @@
 "use client";
 import Field from "./field";
-import { type Ship } from "../types";
+import { OpponentShip, type Ship } from "../types";
 import { transform } from "typescript";
 
 function boatfields(length: number): Array<any> {
@@ -16,15 +16,16 @@ function boatfields(length: number): Array<any> {
   return arr;
 }
 
-export default function Ship({ name, length, horizontal }: Ship) {
+export default function Ship({ name, length, horizontal, destroyed }: Ship) {
   return (
     <div style={{}}>
       {boatfields(length).map((item, index) => (
         <div
           draggable="false"
-          style={
-            horizontal ? { display: "inline-block" } : { display: "block" }
-          }
+          style={{
+            display: horizontal ? "inline-block" : "block",
+            border: destroyed ? "1px solid red" : "",
+          }}
           key={index}
         >
           {item}

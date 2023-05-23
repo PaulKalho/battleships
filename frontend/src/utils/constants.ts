@@ -1254,51 +1254,61 @@ export const INVENTORY = [
     name: "Schlachter",
     length: 5,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "Kreuzer 1",
     length: 4,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "Kreuzer 2",
     length: 4,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "Zerstörer 1",
     length: 3,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "Zerstörer 2",
     length: 3,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "Zerstörer 3",
     length: 3,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "U-Boot 1",
     length: 2,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "U-Boot 2",
     length: 2,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "U-Boot 3",
     length: 2,
     horizontal: true,
+    destroyed: false,
   },
   {
     name: "U-Boot 4",
     length: 2,
     horizontal: true,
+    destroyed: false,
   },
 ];
 

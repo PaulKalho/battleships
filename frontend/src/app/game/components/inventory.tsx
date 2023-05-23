@@ -4,6 +4,7 @@ import Ship from "./ship";
 import { type Ship as TypeShip, type InventoryParams } from "../types";
 
 export default function Inventory({
+  draggable,
   inventory,
   setInventory,
   setCurrentShip,
@@ -26,7 +27,7 @@ export default function Inventory({
 
   return (
     <div className="inventory">
-      Inventar:
+      {draggable ? "Inventar" : "Restliche gegnerische Schiffe:"}
       <div
         style={{
           display: "flex",
@@ -36,7 +37,7 @@ export default function Inventory({
       >
         {inventory.map((ship, index) => (
           <div
-            draggable="true"
+            draggable={draggable}
             style={{
               width: "max-content",
               marginBottom: "25px",
@@ -50,6 +51,7 @@ export default function Inventory({
               name={ship.name}
               length={ship.length}
               horizontal={ship.horizontal}
+              destroyed={ship.destroyed}
             />
           </div>
         ))}

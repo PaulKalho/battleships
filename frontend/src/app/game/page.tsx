@@ -2,6 +2,7 @@
 
 import Board from "./components/board";
 import Inventory from "./components/inventory";
+
 import {
   FIELD,
   OPPONENT_FIELD,
@@ -13,7 +14,7 @@ import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
 import { FieldProps, Coordinates } from "./types";
 import { useGlobalContext } from "../context/store";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 /**
  *
@@ -89,16 +90,7 @@ export default function Home() {
 
     //ship-destroyed -> Player destroyed a ship
     socket.on("ship-destroyed", ({ shipLength }: shipDestroyedParams) => {
-      let foundShip = false;
-      setOpponentShips(
-        opponentShips.filter((ship: any) => {
-          if (foundShip) {
-            return true;
-          }
-          foundShip = ship.length === shipLength;
-          return !foundShip;
-        })
-      );
+      //TODO: Remove the destroyed ship from the opponentShips array!
 
       if (opponentShips.length === 0) {
         //GAME WON!!!!
@@ -203,14 +195,21 @@ export default function Home() {
       <h1>{gameStatus.desc}</h1>
       {gameId}
       <div style={{ display: "flex", width: "100%" }}>
-        <Board
-          boardData={boardDataS}
-          handleDrop={handleDropOnBoard}
-          handleClick={(e) => {
-            e.preventDefault();
+        <div
+          style={{
+            opacity: gameStatus === GAME_CONDITIONS.SELECT_FIELD ? "1" : "0.2",
           }}
-        />
+        >
+          <Board
+            boardData={boardDataS}
+            handleDrop={handleDropOnBoard}
+            handleClick={(e) => {
+              e.preventDefault();
+            }}
+          />
+        </div>
         <Inventory
+          draggable={true}
           inventory={inventory}
           setInventory={setInventory}
           setCurrentShip={setCurrentShip}
@@ -236,9 +235,10 @@ export default function Home() {
         />
         {/* A deactivated Inventory which show remaining ships of the opponent */}
         <Inventory
+          draggable={false}
           inventory={opponentShips}
-          setInventory={setOpponentShips}
-          setCurrentShip={setCurrentShip}
+          setInventory={() => {}}
+          setCurrentShip={() => {}}
         />
       </div>
     </div>

@@ -23,6 +23,7 @@ type ColProps = {
 };
 
 type InventoryParams = {
+  draggable: boolean;
   inventory: Array<Ship>;
   setInventory: Function;
   setCurrentShip: Function;
@@ -32,6 +33,7 @@ type Ship = {
   name: string;
   length: number;
   horizontal: Boolean;
+  destroyed: boolean;
 };
 
 export {
