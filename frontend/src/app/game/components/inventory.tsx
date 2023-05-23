@@ -34,7 +34,7 @@ export default function Inventory({
           gridAutoRows: "auto",
         }}
       >
-        {inventory.map((ship) => (
+        {inventory.map((ship, index) => (
           <div
             draggable="true"
             style={{
@@ -44,6 +44,7 @@ export default function Inventory({
             }}
             onDragStart={(e) => onDragStart(e, ship)}
             onClick={(e) => handleClick(e, ship)}
+            key={index}
           >
             <Ship
               name={ship.name}
