@@ -1,11 +1,16 @@
 import Field from "./field";
 import { type BoardProps } from "../types";
+import { useEffect } from "react";
 
 export default function Board({
   boardData,
   handleDrop,
   handleClick,
 }: BoardProps) {
+  useEffect(() => {
+    console.log(boardData);
+  }, []);
+
   return (
     <div className="game-board">
       {boardData.map((row, y) => (

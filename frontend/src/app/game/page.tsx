@@ -51,13 +51,28 @@ export default function Home() {
       // Its this clients turn
     });
 
+    // was-bombed -> Opponent bombed a field
     socket.on("was-bombed", ({ rowNum, colNum }: wasBombedParams) => {
       var workBoard = [...boardDataS];
 
       workBoard[rowNum][colNum].isBombed = true;
 
-      setBoardDataS(workBoard);
+      setBoardDataS([...workBoard]);
       setWaiting(false);
+    });
+
+    // was-a-hit -> Player hit a ship on opponent Field
+    socket.on("was-a-hit", ({ rowNum, colNum }: wasBombedParams) => {
+      var workBoard = [...boardDataAttacker];
+
+      workBoard[rowNum][colNum] = {
+        isShip: false,
+        isBombed: false,
+        shipIndex: undefined,
+        isHit: true,
+      };
+
+      setBoardDataAttacker([...workBoard]);
     });
   }, [shipPositions]);
 
@@ -82,6 +97,7 @@ export default function Home() {
             isShip: true,
             isBombed: false,
             shipIndex: shipPositions.length,
+            isHit: false,
           };
         }
       } else {
@@ -92,6 +108,7 @@ export default function Home() {
             isShip: true,
             isBombed: false,
             shipIndex: shipPositions.length,
+            isHit: false,
           };
         }
       }
@@ -122,6 +139,7 @@ export default function Home() {
         isShip: false,
         isBombed: true,
         shipIndex: workBoard[rowNum][colNum].shipIndex,
+        isHit: false,
       };
 
       setBoardDataAttacker(workBoard);
