@@ -154,7 +154,10 @@ export default function Home() {
   }
 
   function joinGame(): void {
-    socket.emit("join_game", { gameId: gameId });
+    socket.emit("join_game", {
+      gameId: gameId,
+      boardData: boardDataS,
+    });
   }
 
   function handleDropAttacker(
