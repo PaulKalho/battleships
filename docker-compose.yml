@@ -1,0 +1,14 @@
+version: "3.9"
+
+networks:
+  frontend:
+    name: nextcloud_frontend
+    external: true
+
+services:
+  battleships-frontend:
+    build: frontend
+    ports:
+      - "3000:80"
+    networks:
+      - frontend
