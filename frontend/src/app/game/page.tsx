@@ -31,7 +31,7 @@ export default function Home() {
   const [boardDataAttacker, setBoardDataAttacker] = useState(opponentField);
 
   const [gameStatus, setGameStatus] = useState(GAME_CONDITIONS.SELECT_FIELD);
-  const [gameId, setGameId] = useState<string>();
+  const [gameId, setGameId] = useState<string | null>();
 
   const [inventory, setInventory] = useState([...INVENTORY]);
   const [shipPositions, setShipPositions] = useState<Array<any>>([]);
@@ -39,6 +39,7 @@ export default function Home() {
     name: "default",
     length: 0,
     horizontal: true,
+    destroyed: false,
   });
   const [opponentShips, setOpponentShips] = useState([...OPPONENT_SHIPS]);
 
@@ -203,7 +204,7 @@ export default function Home() {
           <Board
             boardData={boardDataS}
             handleDrop={handleDropOnBoard}
-            handleClick={(e) => {
+            handleClick={(e: React.MouseEvent) => {
               e.preventDefault();
             }}
           />

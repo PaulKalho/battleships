@@ -1,6 +1,6 @@
 "use client";
 import Field from "./field";
-import { OpponentShip, type Ship } from "../types";
+import { type Ship } from "../types";
 import { transform } from "typescript";
 
 function boatfields(length: number): Array<any> {
@@ -8,7 +8,7 @@ function boatfields(length: number): Array<any> {
   for (var i = 0; i < length; i++) {
     arr.push(
       <div key={i}>
-        <Field isShip={true} isBombed={false} />
+        <Field isShip={true} isBombed={false} isHit={false} />
       </div>
     );
   }

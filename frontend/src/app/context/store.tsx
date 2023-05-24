@@ -16,11 +16,15 @@ interface ContextProps {
   socket: any;
 }
 
+type ContextProviderProps = {
+  children: any;
+};
+
 const GlobalContext = createContext<ContextProps>({
   socket: {},
 });
 
-export const GlobalContextProvider = ({ children }) => {
+export const GlobalContextProvider = ({ children }: ContextProviderProps) => {
   const socket = network;
 
   return (
