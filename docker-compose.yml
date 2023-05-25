@@ -12,3 +12,10 @@ services:
       - "3000:80"
     networks:
       - frontend
+
+  battleships-backend:
+    build: backend
+    ports:
+      - "3001:3001"
+    networks:
+      - frontend
