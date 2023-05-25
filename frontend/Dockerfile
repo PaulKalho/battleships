@@ -1,7 +1,5 @@
 FROM node:lts-alpine
 
-RUN npm install -g http-server
-
 WORKDIR /app
 
 COPY package.json ./
@@ -14,4 +12,4 @@ RUN npm run build
 
 EXPOSE 80
 
-CMD [ "http-server" , ".next"]
+CMD [ "npm" , "start"]
