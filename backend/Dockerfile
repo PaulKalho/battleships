@@ -1,5 +1,7 @@
 FROM node:carbon
 
+RUN npm install -g nodemon
+
 WORKDIR /app
 
 COPY package.json ./
