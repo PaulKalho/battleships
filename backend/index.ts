@@ -1,7 +1,14 @@
 const express = require("express");
 const http = require("https");
+const fs = require("fs");
 const app = express();
-const server = http.createServer(app);
+const server = http.createServer(
+  {
+    key: fs.readFileSync("./certs/kalhorn.io_private_key.key"),
+    cert: fs.readFileSync("./certs/kalhorn.io_ssl_certificate.cer"),
+  },
+  app
+);
 
 import { Server } from "socket.io";
 
