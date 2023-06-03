@@ -1,11 +1,23 @@
 const express = require("express");
 const http = require("http");
+const https = require("https");
+const fs = require("fs");
 const app = express();
-const server = http.createServer(app);
+
+var privateKey = fs.readFileSync("certs/kalhorn.io_private_key.key");
+var certificate = fs.readFileSync("certs/kalhorn.io_ssl_certificate.cer");
+
+var credentials = {
+  key: privateKey,
+  cert: certificate,
+};
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 
 import { Server } from "socket.io";
 
-const io = new Server(server, {
+const io = new Server(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -182,6 +194,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3001, () => {
+httpServer.listen(3001, () => {
   console.log("Server listening");
 });
