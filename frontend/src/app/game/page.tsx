@@ -12,7 +12,7 @@ import {
 } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { collisionHandler } from "@/utils/utilityfunctions";
-import { FieldProps, Coordinates } from "./types";
+import { FieldProps, Coordinates, Ship } from "./types";
 import { useGlobalContext } from "../context/store";
 import { useSearchParams } from "next/navigation";
 
@@ -32,6 +32,7 @@ export default function Home() {
 
   const [gameStatus, setGameStatus] = useState(GAME_CONDITIONS.SELECT_FIELD);
   const [gameId, setGameId] = useState<string | null>();
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
 
   const [inventory, setInventory] = useState([...INVENTORY]);
   const [shipPositions, setShipPositions] = useState<Array<any>>([]);
@@ -42,6 +43,7 @@ export default function Home() {
     destroyed: false,
   });
   const [opponentShips, setOpponentShips] = useState([...OPPONENT_SHIPS]);
+  const [removedShip, setRemovedShip] = useState<boolean>(false);
 
   type wasBombedParams = {
     rowNum: number;
@@ -95,7 +97,7 @@ export default function Home() {
 
       if (opponentShips.length === 0) {
         //GAME WON!!!!
-        console.log("DU GEWINNST");
+        window.alert("Du bist der Gewinner!");
       }
     });
   }, [shipPositions]);
@@ -146,6 +148,11 @@ export default function Home() {
       var workInventory = [...inventory];
       workInventory = workInventory.filter((item) => item !== currentShip);
       setInventory(workInventory);
+
+      if (inventory.length === 1) {
+        console.log("goggl");
+        setButtonDisabled(false);
+      }
     } else {
       //Do nothin
     }
@@ -217,7 +224,7 @@ export default function Home() {
         />
       </div>
       <div>
-        <button className="ready" onClick={joinGame}>
+        <button className="ready" onClick={joinGame} disabled={buttonDisabled}>
           Bereit
         </button>
       </div>

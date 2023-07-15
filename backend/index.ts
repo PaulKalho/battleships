@@ -17,7 +17,7 @@ const httpsServer = https.createServer(credentials, app);
 
 import { Server } from "socket.io";
 
-const io = new Server(httpsServer, {
+const io = new Server(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -194,6 +194,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpsServer.listen(3001, () => {
+httpServer.listen(3001, () => {
   console.log("Server listening");
 });
